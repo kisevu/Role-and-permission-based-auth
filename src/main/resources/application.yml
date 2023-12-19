@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: role-based-auth
+server:
+  port: 4000
