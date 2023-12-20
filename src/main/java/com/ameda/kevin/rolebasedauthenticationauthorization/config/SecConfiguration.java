@@ -2,6 +2,7 @@ package com.ameda.kevin.rolebasedauthenticationauthorization.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -10,9 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-
+import static com.ameda.kevin.rolebasedauthenticationauthorization.config.UserPermission.*;
 import static com.ameda.kevin.rolebasedauthenticationauthorization.config.UserRole.*;
-
 @Configuration
 @EnableWebSecurity
 public class SecConfiguration {
@@ -27,6 +27,7 @@ public class SecConfiguration {
                 .requestMatchers("/api/auth/**")
                 .permitAll()
                 .requestMatchers("/api/management/**").hasAnyRole(ADMIN.name(), ADMIN_TRAINEE.name())
+                .requestMatchers(HttpMethod.POST,"/api/management/**").hasAuthority(CONTRACT_WRITE.getPermission())
                 .requestMatchers("/api/resource/**").hasAnyRole(ADMIN.name(), CONTRACTOR.name())
                 .and()
                 .httpBasic();
